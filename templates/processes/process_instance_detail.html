@@ -1,0 +1,253 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ process_instance.name }}
+{% endblock %}
+
+{% block content %}
+
+<!-- ================= PAGE HEADER ================= -->
+<div class="page-header fade-in">
+    <h1 class="page-title">{{ process_instance.name }}</h1>
+    <p class="page-subtitle">
+        {{ process_instance.process.name }}
+        ·
+        {% if process_instance.is_completed %}
+            <span class="badge success">Completed</span>
+        {% else %}
+            <span class="badge active">Active</span>
+        {% endif %}
+    </p>
+</div>
+
+<!-- ================= SUMMARY ================= -->
+<section class="dashboard-section fade-in">
+    <div class="cards-grid">
+
+        <div class="card">
+            <div class="card-title">Process</div>
+            <div class="card-metric">
+                {{ process_instance.process.name }}
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Start date</div>
+            <div class="card-metric">
+                {{ process_instance.started_at|date:"Y-m-d H:i" }}
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Deadline</div>
+            {# ВАЖНО: is_overdue у вас метод. В шаблоне безопаснее использовать булево из view: is_overdue_value #}
+            <div class="card-metric {% if is_overdue_value %}danger{% endif %}">
+                {% if process_instance.planned_end_date %}
+                    {{ process_instance.planned_end_date|date:"Y-m-d" }}
+                {% else %}
+                    <span class="muted">—</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Current stage</div>
+            <div class="card-metric">
+                {% if process_instance.current_stage %}
+                    {{ process_instance.current_stage.name }}
+                {% else %}
+                    <span class="muted">—</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">On stage for</div>
+            <div class="card-metric {% if stage_age and stage_age.days >= 1 %}danger{% endif %}">
+                {% if stage_age %}
+                    {{ stage_age }}
+                {% else %}
+                    <span class="muted">—</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Profit</div>
+            {# ВАЖНО: profit() у вас метод. Используем profit_value из view #}
+            <div class="card-metric {% if profit_value < 0 %}danger{% endif %}">
+                {{ profit_value }}
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Status</div>
+            <div class="card-metric">
+                {% if process_instance.is_completed %}
+                    Completed
+                {% else %}
+                    Active
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ================= STAGE HISTORY ================= -->
+<section class="dashboard-section fade-in">
+    <div class="card">
+        <div class="card-title">Stage timeline</div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Stage</th>
+                    <th>Entered</th>
+                    <th>Left</th>
+                    <th>Duration</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for h in stage_timeline %}
+                <tr>
+                    <td>{{ h.stage.name }}</td>
+                    <td class="muted">{{ h.entered_at|date:"Y-m-d H:i" }}</td>
+                    <td class="muted">
+                        {% if h.left_at %}
+                            {{ h.left_at|date:"Y-m-d H:i" }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if h.left_at %}
+                            {{ h.left_at|timesince:h.entered_at }}
+                        {% else %}
+                            {# today - это date, лучше использовать now (datetime), передай now из view #}
+                            {{ now|timesince:h.entered_at }}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="muted">No stage history</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ================= PROCESS STAGE AVERAGES (OPTIONAL) ================= -->
+<section class="dashboard-section fade-in">
+    <div class="card">
+        <div class="card-title">Average stage time (process-wide)</div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Stage</th>
+                    <th>Avg time</th>
+                    <th>Passes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in avg_stages %}
+                <tr>
+                    <td>{{ r.stage__name }}</td>
+                    <td>{{ r.avg_time }}</td>
+                    <td class="muted">{{ r.passes }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="muted">No data yet</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ================= TASKS ================= -->
+<section class="dashboard-section fade-in">
+    <div class="card">
+        <div class="card-title">Tasks</div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Stage</th>
+                    <th>Status</th>
+                    <th>Assignee</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for task in tasks %}
+                <tr>
+                    <td>{{ task.title }}</td>
+                    <td class="muted">{{ task.stage.name }}</td>
+                    <td>
+                        {% if task.status == "DONE" %}
+                            <span class="badge success">Done</span>
+                        {% elif task.status == "CANCELED" %}
+                            <span class="badge danger">Canceled</span>
+                        {% else %}
+                            <span class="badge active">{{ task.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ task.assignee|default:"—" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="muted">No tasks</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ================= TRANSACTIONS ================= -->
+<section class="dashboard-section fade-in">
+    <div class="card">
+        <div class="card-title">Transactions</div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Account</th>
+                    <th>Task</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for tx in transactions %}
+                <tr>
+                    {# tx.date у тебя DateField, поэтому формат без времени #}
+                    <td class="muted">{{ tx.date|date:"Y-m-d" }}</td>
+                    <td>{{ tx.category.name }}</td>
+                    <td>
+                        <span class="{% if tx.amount < 0 %}danger{% endif %}">
+                            {{ tx.amount }}
+                        </span>
+                    </td>
+                    <td>{{ tx.account.name }}</td>
+                    <td class="muted">{{ tx.task.title|default:"—" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="muted">No transactions</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Inventory{% endblock %}
+
+{% block content %}
+
+<!-- ================= PAGE HEADER ================= -->
+<div class="page-header fade-in">
+    <h1 class="page-title">Inventory</h1>
+    <p class="page-subtitle">
+        Current stock levels and valuation
+    </p>
+</div>
+
+<!-- ================= INVENTORY TABLE ================= -->
+<section class="dashboard-section fade-in">
+
+    <div class="card">
+        <div class="card-title">Inventory items</div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Quantity</th>
+                    <th>Unit</th>
+                    <th>Cost / unit</th>
+                    <th>Total value</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>
+                        <strong>{{ item.name }}</strong>
+                    </td>
+
+                    <td class="muted">
+                        {{ item.category }}
+                    </td>
+
+                    <td>
+                        {{ item.quantity }}
+                    </td>
+
+                    <td class="muted">
+                        {{ item.unit }}
+                    </td>
+
+                    <td>
+                        {{ item.cost_per_unit }}
+                    </td>
+
+                    <td>
+                        <span class="{% if item.total_value < 0 %}danger{% endif %}">
+                            {{ item.total_value }}
+                        </span>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="muted">
+                        No inventory items
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+</section>
+
+{% endblock %}

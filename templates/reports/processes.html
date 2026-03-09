@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}Processes Report{% endblock %}
+
+{% block content %}
+
+<!-- ================= PAGE HEADER ================= -->
+<div class="page-header fade-in">
+    <h1 class="page-title">Processes Report</h1>
+    <p class="page-subtitle">
+        Performance, costs and profitability of business processes
+    </p>
+</div>
+
+<!-- ================= REPORT NAV ================= -->
+<section class="dashboard-section fade-in">
+
+    <div class="card">
+        <nav class="reports-nav">
+
+            <a href="{% url 'finance_report' %}"
+               class="reports-link {% if request.path == '/reports/finance/' %}active{% endif %}">
+                Finance
+            </a>
+
+            <a href="{% url 'process_report' %}"
+               class="reports-link {% if request.path == '/reports/processes/' %}active{% endif %}">
+                Processes
+            </a>
+
+            <a href="{% url 'task_report' %}"
+               class="reports-link {% if request.path == '/reports/tasks/' %}active{% endif %}">
+                Tasks
+            </a>
+
+            <a href="{% url 'inventory_report' %}"
+               class="reports-link {% if request.path == '/reports/inventory/' %}active{% endif %}">
+                Inventory
+            </a>
+
+            <a href="{% url 'purchase_report' %}"
+               class="reports-link {% if request.path == '/reports/purchases/' %}active{% endif %}">
+                Purchases
+            </a>
+
+        </nav>
+    </div>
+
+</section>
+
+<!-- ================= PROCESSES REPORT TABLE ================= -->
+<section class="dashboard-section fade-in">
+
+    <div class="card">
+        <div class="card-title">Processes overview</div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Process</th>
+                    <th>Instance</th>
+                    <th>Manager</th>
+                    <th>Income</th>
+                    <th>Expense</th>
+                    <th>Profit</th>
+                    <th>Inventory cost</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for row in report %}
+                <tr>
+                    <td class="muted">{{ row.process.name }}</td>
+
+                    <td>
+                        <strong>{{ row.process_instance.name }}</strong>
+                    </td>
+
+                    <td class="muted">{{ row.manager }}</td>
+
+                    <td>{{ row.income }}</td>
+
+                    <td>
+                        <span class="danger">{{ row.expense }}</span>
+                    </td>
+
+                    <td>
+                        <strong class="{% if row.profit < 0 %}danger{% endif %}">
+                            {{ row.profit }}
+                        </strong>
+                    </td>
+
+                    <td>{{ row.inventory_cost }}</td>
+
+                    <td>
+                        {% if row.is_completed %}
+                            <span class="badge success">Completed</span>
+                        {% else %}
+                            <span class="badge active">Active</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="muted">
+                        No process data
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+</section>
+
+{% endblock %}

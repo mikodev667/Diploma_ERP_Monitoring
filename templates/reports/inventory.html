@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Inventory Report{% endblock %}
+
+{% block content %}
+
+<!-- ================= PAGE HEADER ================= -->
+<div class="page-header fade-in">
+    <h1 class="page-title">Inventory Report</h1>
+    <p class="page-subtitle">
+        Inventory usage, valuation and status
+    </p>
+</div>
+
+<!-- ================= REPORT NAV ================= -->
+<section class="dashboard-section fade-in">
+
+    <div class="card">
+        <nav class="reports-nav">
+
+            <a href="{% url 'finance_report' %}"
+               class="reports-link {% if request.path == '/reports/finance/' %}active{% endif %}">
+                Finance
+            </a>
+
+            <a href="{% url 'process_report' %}"
+               class="reports-link {% if request.path == '/reports/processes/' %}active{% endif %}">
+                Processes
+            </a>
+
+            <a href="{% url 'task_report' %}"
+               class="reports-link {% if request.path == '/reports/tasks/' %}active{% endif %}">
+                Tasks
+            </a>
+
+            <a href="{% url 'inventory_report' %}"
+               class="reports-link {% if request.path == '/reports/inventory/' %}active{% endif %}">
+                Inventory
+            </a>
+
+            <a href="{% url 'purchase_report' %}"
+               class="reports-link {% if request.path == '/reports/purchases/' %}active{% endif %}">
+                Purchases
+            </a>
+
+        </nav>
+    </div>
+
+</section>
+
+<!-- ================= INVENTORY REPORT TABLE ================= -->
+<section class="dashboard-section fade-in">
+
+    <div class="card">
+        <div class="card-title">Inventory report</div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Item</th>
+                    <th>Quantity</th>
+                    <th>Unit</th>
+                    <th>Cost / unit</th>
+                    <th>Total value</th>
+                    <th>Used quantity</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for row in report %}
+                <tr>
+                    <td class="muted">{{ row.category }}</td>
+
+                    <td>
+                        <strong>{{ row.item.name }}</strong>
+                    </td>
+
+                    <td>{{ row.quantity }}</td>
+
+                    <td class="muted">{{ row.unit }}</td>
+
+                    <td>{{ row.cost_per_unit }}</td>
+
+                    <td>
+                        <span class="{% if row.total_value < 0 %}danger{% endif %}">
+                            {{ row.total_value }}
+                        </span>
+                    </td>
+
+                    <td>{{ row.used_quantity }}</td>
+
+                    <td>
+                        {% if row.is_active %}
+                            <span class="badge active">Active</span>
+                        {% else %}
+                            <span class="badge success">Inactive</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="muted">
+                        No inventory data
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block title %}Monitoring{% endblock %}
+
+{% block content %}
+
+<!-- ================= PAGE HEADER ================= -->
+<div class="page-header fade-in">
+    <h1 class="page-title">MakBee</h1>
+    <p class="page-subtitle">
+        Business process efficiency dashboard · {{ kpis.period.start }} — {{ kpis.period.end }}
+    </p>
+</div>
+
+<!-- ================= KPI CARDS ================= -->
+<!-- [Скриншот 3.1: Monitoring Dashboard KPI cards] -->
+<section class="dashboard-section fade-in">
+    <div class="cards-grid">
+
+        <div class="card">
+            <div class="card-title">Active processes</div>
+            <div class="card-metric">{{ kpis.active_processes }}</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Avg profit (period)</div>
+            <div class="card-metric {% if kpis.avg_profit < 0 %}danger{% endif %}">
+                {{ kpis.avg_profit|intcomma }}
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Overdue tasks</div>
+            <div class="card-metric {% if kpis.overdue_tasks > 0 %}danger{% endif %}">
+                {{ kpis.overdue_tasks }}
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Budget overruns</div>
+            <div class="card-metric {% if kpis.budget_overruns > 0 %}danger{% endif %}">
+                {{ kpis.budget_overruns }}
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ================= PROBLEM PROCESSES ================= -->
+<section class="dashboard-section fade-in">
+    <h2 class="section-title">Problem processes</h2>
+    <p class="page-subtitle">Processes that require attention: negative profit, budget overrun, overdue deadline.</p>
+
+    <!-- [Скриншот 3.2: Problem processes table with flags] -->
+    <div class="card">
+        <div class="card-title">Processes with risks</div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Instance</th>
+                    <th>Process</th>
+                    <th>Profit</th>
+                    <th>Cost</th>
+                    <th>Planned budget</th>
+                    <th>Planned end</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for row in problems %}
+                {% with pi=row.process_instance %}
+                <tr>
+                    <td>
+                        <a class="table-link" href="{% url 'process_instance_detail' pi.id %}">
+                            {{ pi.name }}
+                        </a>
+                    </td>
+                    <td>{{ pi.process.name }}</td>
+
+                    <td>
+                        <span class="{% if row.profit < 0 %}danger{% endif %}">
+                            {{ row.profit|intcomma }}
+                        </span>
+                    </td>
+
+                    <td>{{ row.cost }}</td>
+                    <td>{{ pi.planned_budget|default:"—" }}</td>
+                    <td>{{ pi.planned_end_date|default:"—" }}</td>
+
+                    <td>
+                        {% if pi.is_completed %}
+                            <span class="badge success">Completed</span>
+                        {% else %}
+                            <span class="badge active">Active</span>
+                        {% endif %}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="7">
+                        {% for f in row.flags %}
+                            {% if f == "NEGATIVE_PROFIT" %}
+                                <span class="badge danger">Negative profit</span>
+                            {% elif f == "BUDGET_OVERRUN" %}
+                                <span class="badge warning">Budget overrun</span>
+                            {% elif f == "OVERDUE" %}
+                                <span class="badge danger">Overdue</span>
+                            {% else %}
+                                <span class="badge">{{ f }}</span>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% endwith %}
+            {% empty %}
+                <tr>
+                    <td colspan="7" class="list-empty">No problem processes for this period</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ================= TIME ANALYTICS ================= -->
+<section class="dashboard-section fade-in">
+    <h2 class="section-title">Time analytics</h2>
+
+    <!-- [Скриншот 3.3: Current vs Previous month comparison] -->
+    <div class="cards-grid">
+        <div class="card">
+            <div class="card-title">Current period profit</div>
+            <div class="card-metric {% if analytics.current.profit < 0 %}danger{% endif %}">
+                {{ analytics.current.profit|intcomma }}
+            </div>
+            <div class="list-muted">Income: {{ analytics.current.income|intcomma }} · Expense: {{ analytics.current.expense|intcomma }}</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Previous period profit</div>
+            <div class="card-metric {% if analytics.previous.profit < 0 %}danger{% endif %}">
+                {{ analytics.previous.profit|intcomma }}
+            </div>
+            <div class="list-muted">Income: {{ analytics.previous.income|intcomma }} · Expense: {{ analytics.previous.expense|intcomma }}</div>
+        </div>
+    </div>
+
+    <!-- [Скриншот 3.4: Daily profit trend output] -->
+    <div class="card">
+        <div class="card-title">Daily profit trend</div>
+
+        <!-- [Скриншот 3.4: Daily profit trend chart] -->
+        <div style="height:320px;">
+            <canvas id="dailyProfitChart"></canvas>
+        </div>
+
+        {% if not analytics.daily_profit %}
+            <div class="list-empty">No data</div>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+(function () {
+  const el = document.getElementById("dailyProfitChart");
+  if (!el) return;
+
+  const labels = [
+    {% for d in analytics.daily_profit %}
+      "{{ d.d|date:'Y-m-d' }}"{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ];
+
+  const values = [
+    {% for d in analytics.daily_profit %}
+      {{ d.total|floatformat:2 }}{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ];
+
+  // если данных нет — не строим
+  if (labels.length === 0) return;
+
+  new Chart(el, {
+    type: "line",
+    data: {
+      labels: labels,
+      datasets: [{
+        label: "Profit",
+        data: values,
+        tension: 0.25
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: "index", intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(ctx) {
+              const v = ctx.parsed.y ?? 0;
+              // формат 1,500,000 (можно заменить на точки отдельно, если нужно)
+              return "Profit: " + v.toLocaleString("en-US", { maximumFractionDigits: 2 });
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          ticks: {
+            callback: function(value) {
+              return Number(value).toLocaleString("en-US", { maximumFractionDigits: 0 });
+            }
+          }
+        }
+      }
+    }
+  });
+})();
+</script>
+
+{% endblock %}

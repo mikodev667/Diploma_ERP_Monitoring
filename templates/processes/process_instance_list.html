@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block title %}Processes{% endblock %}
+
+{% block content %}
+
+<div class="page-header fade-in">
+    <h1 class="page-title">Process instances</h1>
+    <p class="page-subtitle">All running and completed business processes</p>
+</div>
+
+<section class="dashboard-section fade-in">
+    <div class="card">
+        <div class="card-title">Processes list</div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Process</th>
+                    <th>Manager</th>
+                    <th>Deadline</th>
+                    <th>Profit</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for pi in process_instances %}
+                <tr>
+                    <td>
+                        <a class="table-link" href="{% url 'process_instance_detail' pi.id %}">
+                            {{ pi.name }}
+                        </a>
+                    </td>
+
+                    <td>{{ pi.process.name }}</td>
+                    <td class="muted">{{ pi.manager }}</td>
+
+                    <td>
+                        {% if pi.planned_end_date %}
+                            <span class="{% if not pi.is_completed and pi.planned_end_date < today %}danger{% endif %}">
+                                {{ pi.planned_end_date|date:"Y-m-d" }}
+                            </span>
+                        {% else %}
+                            <span class="muted">—</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        <span class="{% if pi.profit < 0 %}danger{% endif %}">
+                            {{ pi.profit|intcomma }}
+                        </span>
+                    </td>
+
+                    <td>
+                        {% if pi.is_completed %}
+                            <span class="badge success">Completed</span>
+                        {% else %}
+                            <span class="badge active">Active</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="muted">No process instances</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+{% endblock %}

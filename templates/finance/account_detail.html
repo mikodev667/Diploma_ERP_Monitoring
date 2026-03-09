@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}Account: {{ account.name }}{% endblock %}
+
+{% block content %}
+
+<!-- ================= PAGE HEADER ================= -->
+<div class="page-header fade-in">
+    <h1 class="page-title">{{ account.name }}</h1>
+    <p class="page-subtitle">
+        Account financial details and transactions
+    </p>
+</div>
+
+<!-- ================= SUMMARY ================= -->
+<section class="dashboard-section fade-in">
+
+    <div class="cards-grid">
+
+        <div class="card">
+            <div class="card-title">Income</div>
+            <div class="card-metric">{{ income }}</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Expense</div>
+            <div class="card-metric danger">{{ expense }}</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Balance</div>
+            <div class="card-metric {% if balance < 0 %}danger{% endif %}">
+                {{ balance }}
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= TRANSACTIONS ================= -->
+<section class="dashboard-section fade-in">
+
+    <div class="card">
+        <div class="card-title">Transactions</div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Category</th>
+                    <th>Process</th>
+                    <th>Task</th>
+                    <th>Comment</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for t in transactions %}
+                <tr>
+                    <td class="muted">{{ t.date }}</td>
+
+                    <td>
+                        <span class="{% if t.amount < 0 %}danger{% endif %}">
+                            {{ t.amount }}
+                        </span>
+                    </td>
+
+                    <td class="muted">{{ t.category }}</td>
+
+                    <td>
+                        {% if t.process_instance %}
+                            <a class="table-link"
+                               href="{% url 'process_instance_detail' t.process_instance.id %}">
+                                {{ t.process_instance }}
+                            </a>
+                        {% else %}
+                            <span class="muted">—</span>
+                        {% endif %}
+                    </td>
+
+                    <td class="muted">
+                        {{ t.task|default:"—" }}
+                    </td>
+
+                    <td class="muted">
+                        {{ t.comment|default:"—" }}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="muted">
+                        No transactions
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+</section>
+
+{% endblock %}

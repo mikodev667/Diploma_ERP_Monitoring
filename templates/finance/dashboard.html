@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block title %}Finance{% endblock %}
+
+{% block content %}
+
+<!-- ================= PAGE HEADER ================= -->
+<div class="page-header fade-in">
+    <h1 class="page-title">Finance</h1>
+    <p class="page-subtitle">
+        Financial overview and recent activity
+    </p>
+</div>
+
+<!-- ================= SUMMARY ================= -->
+<section class="dashboard-section fade-in">
+
+    <div class="cards-grid">
+
+        <div class="card">
+            <div class="card-title">Total balance</div>
+            <div class="card-metric">{{ total_balance }}</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Income (this month)</div>
+            <div class="card-metric">{{ income_month }}</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Expense (this month)</div>
+            <div class="card-metric">{{ expense_month }}</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Net result</div>
+            <div class="card-metric {% if net_month < 0 %}danger{% endif %}">
+                {{ net_month }}
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= ACCOUNTS ================= -->
+<section class="dashboard-section fade-in">
+
+    <div class="card">
+        <div class="card-title">Accounts</div>
+
+        <ul class="list">
+            {% for acc in accounts %}
+                <li class="list-item">
+                    <a class="table-link"
+                       href="{% url 'account_detail' acc.id %}">
+                        {{ acc.name }}
+                    </a>
+                    <span class="list-muted">{{ acc.balance }}</span>
+                </li>
+            {% empty %}
+                <li class="list-empty">No accounts</li>
+            {% endfor %}
+        </ul>
+
+    </div>
+
+</section>
+
+<!-- ================= LAST TRANSACTIONS ================= -->
+<section class="dashboard-section fade-in">
+
+    <div class="card">
+        <div class="card-title">Recent transactions</div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Account</th>
+                    <th>Amount</th>
+                    <th>Category</th>
+                    <th>Process</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for t in last_transactions %}
+                <tr>
+                    <td class="muted">{{ t.date }}</td>
+
+                    <td>{{ t.account.name }}</td>
+
+                    <td>
+                        <span class="{% if t.amount < 0 %}danger{% endif %}">
+                            {{ t.amount }}
+                        </span>
+                    </td>
+
+                    <td class="muted">{{ t.category }}</td>
+
+                    <td class="muted">
+                        {{ t.process_instance|default:"—" }}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="muted">
+                        No transactions
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+</section>
+
+{% endblock %}

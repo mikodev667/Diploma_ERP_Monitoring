@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}Tasks Report{% endblock %}
+
+{% block content %}
+
+<!-- ================= PAGE HEADER ================= -->
+<div class="page-header fade-in">
+    <h1 class="page-title">Tasks Report</h1>
+    <p class="page-subtitle">
+        Task-level costs and financial impact
+    </p>
+</div>
+
+<!-- ================= REPORT NAV ================= -->
+<section class="dashboard-section fade-in">
+
+    <div class="card">
+        <nav class="reports-nav">
+
+            <a href="{% url 'finance_report' %}"
+               class="reports-link {% if request.path == '/reports/finance/' %}active{% endif %}">
+                Finance
+            </a>
+
+            <a href="{% url 'process_report' %}"
+               class="reports-link {% if request.path == '/reports/processes/' %}active{% endif %}">
+                Processes
+            </a>
+
+            <a href="{% url 'task_report' %}"
+               class="reports-link {% if request.path == '/reports/tasks/' %}active{% endif %}">
+                Tasks
+            </a>
+
+            <a href="{% url 'inventory_report' %}"
+               class="reports-link {% if request.path == '/reports/inventory/' %}active{% endif %}">
+                Inventory
+            </a>
+
+            <a href="{% url 'purchase_report' %}"
+               class="reports-link {% if request.path == '/reports/purchases/' %}active{% endif %}">
+                Purchases
+            </a>
+
+        </nav>
+    </div>
+
+</section>
+
+<!-- ================= TASKS REPORT TABLE ================= -->
+<section class="dashboard-section fade-in">
+
+    <div class="card">
+        <div class="card-title">Tasks analytics</div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Task</th>
+                    <th>Process</th>
+                    <th>Stage</th>
+                    <th>Inventory cost</th>
+                    <th>Finance result</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for row in report %}
+                <tr>
+                    <td>
+                        <strong>{{ row.task.title }}</strong>
+                    </td>
+
+                    <td class="muted">
+                        {{ row.process_instance }}
+                    </td>
+
+                    <td class="muted">
+                        {{ row.stage }}
+                    </td>
+
+                    <td>
+                        <span class="{% if row.inventory_cost < 0 %}danger{% endif %}">
+                            {{ row.inventory_cost }}
+                        </span>
+                    </td>
+
+                    <td>
+                        <strong class="{% if row.finance_result < 0 %}danger{% endif %}">
+                            {{ row.finance_result }}
+                        </strong>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="muted">
+                        No task report data
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+</section>
+
+{% endblock %}

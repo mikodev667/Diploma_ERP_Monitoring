@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Accounts{% endblock %}
+
+{% block content %}
+<h2>Accounts</h2>
+
+<table border="1" cellpadding="8">
+    <tr>
+        <th>Name</th>
+        <th>Currency</th>
+        <th>Balance</th>
+    </tr>
+
+    {% for acc in accounts %}
+    <tr>
+        <td>
+            <a href="{% url 'account_detail' acc.id %}">
+                {{ acc.name }}
+            </a>
+        </td>
+        <td>{{ acc.currency }}</td>
+        <td>{{ acc.balance }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="3">No accounts</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

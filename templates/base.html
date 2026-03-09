@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ERP Monitor{% endblock %}</title> <!-- Meta -->
+    <meta name="description" content="ERP Monitor – system for monitoring business processes, tasks, finance and inventory.">
+    <!-- Core styles -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <!-- Page specific styles -->
+    {% block extra_css %}{% endblock %}
+</head> <body class="app">
+<!-- ===== HEADER ===== --> 
+<header class="app-header">
+    <div class="container header-container">
+        <div class="brand">
+            <span class="brand-logo">⚙</span>
+            <span class="brand-title">ERP Monitor</span>
+        </div>
+        <nav class="main-nav">
+            <a href="/" class="nav-link">Dashboard</a>
+            {% if request.user.role != "EMPLOYEE" %}
+            <a href="/processes/" class="nav-link">Processes</a>
+            {% endif %} <a href="/tasks/" class="nav-link">Tasks</a>
+            {% if request.user.role != "EMPLOYEE" %}
+            <a href="/finance/" class="nav-link">Finance</a>
+            {% endif %} {% if request.user.role != "EMPLOYEE" %}
+            <a href="/inventory/" class="nav-link">Inventory</a>
+            {% endif %} {% if request.user.role != "EMPLOYEE" %}
+            <a href="/reports/" class="nav-link">Reports</a>
+            {% endif %}
+            {% if request.user.role == "OWNER" %}
+            <a href="/admin/" class="nav-link nav-link--danger">Admin</a>
+            {% endif %} </nav> <div class="user-menu"> <span class="user-name">
+        {{ request.user.username }}</span>
+        <button class="user-avatar"> {{ request.user.username|first|upper }} </button>
+    </div>
+    </div>
+</header>
+<!-- ===== APP LAYOUT ===== -->
+<div class="app-layout">
+    <!-- Optional sidebar (future ready) -->
+    {% block sidebar %}{% endblock %}
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="app-content">
+        <div class="container content-container">
+            {% block content %}
+            <!-- Page content -->
+            {% endblock %} </div>
+    </main>
+</div>
+<!-- ===== FOOTER ===== -->
+<footer class="app-footer">
+    <div class="container footer-container">
+        <p class="footer-text"> ERP Monitor — system for monitoring business processes, tasks and finance. </p>
+        <p class="footer-copy"> © {{ now|date:"Y" }} ERP Monitor. All rights reserved. </p>
+    </div> </footer> <!-- Core scripts -->
+<script src="{% static 'js/main.js' %}"></script> <!-- Page specific scripts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

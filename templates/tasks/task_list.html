@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Tasks{% endblock %}
+
+{% block content %}
+
+<!-- ================= PAGE HEADER ================= -->
+<div class="page-header fade-in">
+    <h1 class="page-title">Tasks</h1>
+    <p class="page-subtitle">
+        All assigned and system tasks
+    </p>
+</div>
+
+<!-- ================= TASKS TABLE ================= -->
+<section class="dashboard-section fade-in">
+
+    <div class="card">
+        <div class="card-title">Tasks list</div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Process</th>
+                    <th>Stage</th>
+                    <th>Status</th>
+                    <th>Assignee</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for task in tasks %}
+                <tr>
+                    <td>
+                        <strong>{{ task.title }}</strong>
+                    </td>
+
+                    <td class="muted">
+                        {{ task.process_instance.name }}
+                    </td>
+
+                    <td class="muted">
+                        {{ task.stage.name }}
+                    </td>
+
+                    <td>
+                        {% if task.status == "DONE" %}
+                            <span class="badge success">Done</span>
+                        {% else %}
+                            <span class="badge active">{{ task.status }}</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {{ task.assignee }}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="muted">
+                        No tasks
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+</section>
+
+{% endblock %}

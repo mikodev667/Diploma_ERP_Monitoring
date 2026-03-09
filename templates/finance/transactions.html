@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Transactions{% endblock %}
+
+{% block content %}
+<h2>Transactions</h2>
+
+<table border="1" cellpadding="8">
+    <tr>
+        <th>Date</th>
+        <th>Amount</th>
+        <th>Category</th>
+        <th>Account</th>
+        <th>Process</th>
+        <th>Task</th>
+    </tr>
+
+    {% for tx in transactions %}
+    <tr>
+        <td>{{ tx.date }}</td>
+        <td>{{ tx.amount }}</td>
+        <td>{{ tx.category.name }}</td>
+        <td>{{ tx.account.name }}</td>
+        <td>{{ tx.process_instance }}</td>
+        <td>{{ tx.task }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="6">No transactions</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
