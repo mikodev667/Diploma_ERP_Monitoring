@@ -1,10 +1,6 @@
-from django.db.models import Sum
 from django.shortcuts import render
 from django.utils import timezone
 from dashboard.services.monitoring import month_period, dashboard_kpis, problem_processes, time_analytics
-from tasks.models import Task
-from processes.models import ProcessInstance
-from finance.models import Account, Transaction
 
 
 def monitoring_view(request):
@@ -18,3 +14,7 @@ def monitoring_view(request):
         "analytics": time_analytics(request.user, period),
     }
     return render(request, "dashboard/monitoring.html", context)
+
+
+def main_page(request):
+    return render(request, "dashboard/main_page.html")

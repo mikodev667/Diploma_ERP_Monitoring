@@ -1,0 +1,533 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Welcome | ERP Monitor{% endblock %}
+
+{% block extra_css %}
+<style>
+.erp-welcome {
+    position: relative;
+    overflow: hidden;
+    padding: 24px 0 56px;
+    min-height: calc(100vh - 220px);
+
+    background: linear-gradient(180deg, #08101d 0%, #0b1324 45%, #09111f 100%);
+    border-radius: 32px;
+}
+
+    .erp-welcome::before,
+    .erp-welcome::after {
+        content: "";
+        position: absolute;
+        border-radius: 50%;
+        pointer-events: none;
+        filter: blur(90px);
+        opacity: 0.5;
+    }
+
+    .erp-welcome::before {
+        width: 360px;
+        height: 360px;
+        top: -120px;
+        left: -120px;
+        background: rgba(56, 189, 248, 0.18);
+    }
+
+    .erp-welcome::after {
+        width: 420px;
+        height: 420px;
+        right: -140px;
+        top: 80px;
+        background: rgba(99, 102, 241, 0.18);
+    }
+
+    .erp-welcome__backdrop {
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(circle at 15% 20%, rgba(14, 165, 233, 0.18), transparent 24%),
+            radial-gradient(circle at 85% 18%, rgba(99, 102, 241, 0.18), transparent 26%),
+            radial-gradient(circle at 50% 100%, rgba(59, 130, 246, 0.12), transparent 30%),
+            linear-gradient(180deg, #08101d 0%, #0b1324 45%, #09111f 100%);
+        border-radius: 32px;
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    }
+
+    .erp-welcome__backdrop::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 32px;
+        background-image:
+            linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+        background-size: 64px 64px;
+        mask-image: linear-gradient(to bottom, rgba(255,255,255,0.55), rgba(255,255,255,0.15));
+        pointer-events: none;
+        opacity: 0.35;
+    }
+
+    .erp-welcome__inner {
+        position: relative;
+        z-index: 1;
+        padding: 34px 30px 24px;
+    }
+
+    .erp-welcome__grid {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 28px;
+        align-items: center;
+        margin-bottom: 34px;
+    }
+
+    .erp-welcome__hero {
+        padding-right: 10px;
+    }
+
+    .erp-welcome__badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.5);
+        border: 1px solid rgba(125, 211, 252, 0.18);
+        color: #7dd3fc;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        box-shadow: 0 14px 28px rgba(2, 6, 23, 0.28);
+        backdrop-filter: blur(12px);
+    }
+
+    .erp-welcome__title {
+        margin: 22px 0 16px;
+        font-size: clamp(2.6rem, 5vw, 4.9rem);
+        line-height: 1.02;
+        letter-spacing: -0.05em;
+        font-weight: 800;
+        color: #f8fafc;
+    }
+
+    .erp-welcome__title span {
+        display: block;
+        background: linear-gradient(135deg, #7dd3fc 0%, #60a5fa 35%, #818cf8 75%, #c084fc 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .erp-welcome__subtitle {
+        max-width: 760px;
+        margin: 0 0 26px;
+        color: #94a3b8;
+        font-size: 1.05rem;
+        line-height: 1.9;
+    }
+
+    .erp-welcome__points {
+        display: grid;
+        gap: 12px;
+        margin-bottom: 28px;
+    }
+
+    .erp-welcome__point {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 16px 18px;
+        border-radius: 18px;
+        background: rgba(15, 23, 42, 0.64);
+        border: 1px solid rgba(148, 163, 184, 0.12);
+        box-shadow: 0 16px 35px rgba(2, 6, 23, 0.24);
+        backdrop-filter: blur(10px);
+    }
+
+    .erp-welcome__point-dot {
+        width: 11px;
+        height: 11px;
+        margin-top: 7px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #22d3ee, #6366f1);
+        box-shadow: 0 0 0 6px rgba(34, 211, 238, 0.08);
+        flex-shrink: 0;
+    }
+
+    .erp-welcome__point-text {
+        color: #dbe7f3;
+        line-height: 1.65;
+        font-weight: 500;
+    }
+
+    .erp-welcome__actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+    }
+
+    .erp-welcome__btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 180px;
+        padding: 14px 22px;
+        border-radius: 16px;
+        text-decoration: none;
+        font-weight: 700;
+        transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease, background .25s ease;
+    }
+
+    .erp-welcome__btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .erp-welcome__btn--primary {
+        color: #eaf6ff;
+        background: linear-gradient(135deg, #2563eb, #06b6d4);
+        box-shadow: 0 18px 34px rgba(37, 99, 235, 0.28);
+    }
+
+    .erp-welcome__btn--secondary {
+        color: #dbeafe;
+        background: rgba(15, 23, 42, 0.58);
+        border: 1px solid rgba(125, 211, 252, 0.16);
+        box-shadow: 0 16px 30px rgba(2, 6, 23, 0.20);
+    }
+
+    .erp-welcome__btn--secondary:hover {
+        border-color: rgba(125, 211, 252, 0.32);
+        background: rgba(15, 23, 42, 0.75);
+    }
+
+    .erp-welcome__panel {
+        position: relative;
+        padding: 1px;
+        border-radius: 28px;
+        background: linear-gradient(145deg, rgba(125, 211, 252, 0.24), rgba(99, 102, 241, 0.10), rgba(255, 255, 255, 0.04));
+        box-shadow: 0 26px 55px rgba(2, 6, 23, 0.34);
+    }
+
+    .erp-welcome__panel-inner {
+        position: relative;
+        overflow: hidden;
+        padding: 26px;
+        border-radius: 27px;
+        background: linear-gradient(180deg, rgba(10, 16, 30, 0.96) 0%, rgba(13, 21, 38, 0.98) 100%);
+        color: #f8fafc;
+    }
+
+    .erp-welcome__panel-inner::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.14), transparent 34%);
+        pointer-events: none;
+    }
+
+    .erp-welcome__panel-header {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 16px;
+        margin-bottom: 22px;
+    }
+
+    .erp-welcome__panel-label {
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #7dd3fc;
+        margin-bottom: 8px;
+    }
+
+    .erp-welcome__panel-title {
+        font-size: 1.7rem;
+        line-height: 1.2;
+        font-weight: 800;
+        color: #f8fafc;
+    }
+
+    .erp-welcome__panel-status {
+        padding: 8px 14px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #67e8f9;
+        background: rgba(6, 182, 212, 0.10);
+        border: 1px solid rgba(34, 211, 238, 0.16);
+        white-space: nowrap;
+    }
+
+    .erp-welcome__mini-cards {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        gap: 14px;
+    }
+
+    .erp-welcome__mini-card {
+        padding: 16px;
+        border-radius: 18px;
+        background: rgba(15, 23, 42, 0.76);
+        border: 1px solid rgba(148, 163, 184, 0.10);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+    }
+
+    .erp-welcome__mini-card-title {
+        font-size: 1rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+        color: #eff6ff;
+    }
+
+    .erp-welcome__mini-card-text {
+        font-size: 0.94rem;
+        line-height: 1.65;
+        color: #93a7bd;
+    }
+
+    .erp-welcome__mini-stats {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+        margin-top: 16px;
+    }
+
+    .erp-welcome__mini-stat {
+        padding: 16px;
+        border-radius: 18px;
+        background: linear-gradient(135deg, rgba(30, 41, 59, 0.92), rgba(15, 23, 42, 0.9));
+        border: 1px solid rgba(125, 211, 252, 0.10);
+    }
+
+    .erp-welcome__mini-stat-label {
+        display: block;
+        margin-bottom: 8px;
+        color: #7c93ac;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+
+    .erp-welcome__mini-stat-value {
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: #f8fafc;
+    }
+
+    .erp-welcome__audience {
+        position: relative;
+        z-index: 1;
+        margin-top: 8px;
+    }
+
+    .erp-welcome__section-caption {
+        margin-bottom: 10px;
+        font-size: 12px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: #7dd3fc;
+    }
+
+    .erp-welcome__section-title {
+        max-width: 780px;
+        margin: 0 0 22px;
+        font-size: clamp(1.8rem, 3vw, 2.8rem);
+        line-height: 1.2;
+        color: #f8fafc;
+        font-weight: 800;
+    }
+
+    .erp-welcome__audience-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+    }
+
+    .erp-welcome__audience-card {
+        padding: 24px;
+        border-radius: 22px;
+        background: rgba(15, 23, 42, 0.64);
+        border: 1px solid rgba(148, 163, 184, 0.10);
+        box-shadow: 0 16px 34px rgba(2, 6, 23, 0.22);
+        backdrop-filter: blur(12px);
+        transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+    }
+
+    .erp-welcome__audience-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(125, 211, 252, 0.18);
+        box-shadow: 0 22px 40px rgba(2, 6, 23, 0.30);
+    }
+
+    .erp-welcome__audience-card h3 {
+        margin: 0 0 12px;
+        font-size: 1.16rem;
+        color: #eff6ff;
+    }
+
+    .erp-welcome__audience-card p {
+        margin: 0;
+        line-height: 1.75;
+        color: #93a7bd;
+    }
+
+    @media (max-width: 1100px) {
+        .erp-welcome__grid {
+            grid-template-columns: 1fr;
+        }
+
+        .erp-welcome__hero {
+            padding-right: 0;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .erp-welcome__inner {
+            padding: 22px 18px 18px;
+        }
+
+        .erp-welcome__title {
+            font-size: 2.35rem;
+        }
+
+        .erp-welcome__actions {
+            flex-direction: column;
+        }
+
+        .erp-welcome__btn {
+            width: 100%;
+        }
+
+        .erp-welcome__mini-stats,
+        .erp-welcome__audience-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .erp-welcome__panel-inner {
+            padding: 20px;
+        }
+
+        .erp-welcome__panel-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="erp-welcome fade-in">
+    <div class="erp-welcome__backdrop"></div>
+
+    <div class="erp-welcome__inner">
+        <div class="erp-welcome__grid">
+            <div class="erp-welcome__hero">
+                <div class="erp-welcome__badge">Business Process Monitoring Platform</div>
+
+                <h1 class="erp-welcome__title">
+                    Welcome to the system for monitoring
+                    <span>business process efficiency</span>
+                </h1>
+
+                <p class="erp-welcome__subtitle">
+                    A modern web platform designed for transparent control of business processes, tasks, operational activities,
+                    finance, inventory, and performance analytics within one connected digital environment.
+                </p>
+
+                <div class="erp-welcome__points">
+                    <div class="erp-welcome__point">
+                        <div class="erp-welcome__point-dot"></div>
+                        <div class="erp-welcome__point-text">One digital space for process control, task coordination, reporting, and management visibility.</div>
+                    </div>
+                    <div class="erp-welcome__point">
+                        <div class="erp-welcome__point-dot"></div>
+                        <div class="erp-welcome__point-text">Real-time insight into execution status, deviations, key indicators, and operational performance.</div>
+                    </div>
+                    <div class="erp-welcome__point">
+                        <div class="erp-welcome__point-dot"></div>
+                        <div class="erp-welcome__point-text">A clean and intuitive interface for owners, managers, analysts, and employees.</div>
+                    </div>
+                </div>
+
+                <div class="erp-welcome__actions">
+                    <a href="/dashboard/" class="erp-welcome__btn erp-welcome__btn--primary">Open Dashboard</a>
+                    <a href="/processes/" class="erp-welcome__btn erp-welcome__btn--secondary">Explore Processes</a>
+                </div>
+            </div>
+
+            <div class="erp-welcome__panel">
+                <div class="erp-welcome__panel-inner">
+                    <div class="erp-welcome__panel-header">
+                        <div>
+                            <div class="erp-welcome__panel-label">ERP Monitor Platform</div>
+                            <div class="erp-welcome__panel-title">Night-mode analytics and operational control</div>
+                        </div>
+                        <div class="erp-welcome__panel-status">System online</div>
+                    </div>
+
+                    <div class="erp-welcome__mini-cards">
+                        <div class="erp-welcome__mini-card">
+                            <div class="erp-welcome__mini-card-title">Process Monitoring</div>
+                            <div class="erp-welcome__mini-card-text">Track stages, deadlines, statuses, bottlenecks, and execution results across business workflows.</div>
+                        </div>
+                        <div class="erp-welcome__mini-card">
+                            <div class="erp-welcome__mini-card-title">Task Management</div>
+                            <div class="erp-welcome__mini-card-text">Assign responsibilities, monitor progress, and improve execution discipline across teams.</div>
+                        </div>
+                        <div class="erp-welcome__mini-card">
+                            <div class="erp-welcome__mini-card-title">KPI and Reporting</div>
+                            <div class="erp-welcome__mini-card-text">Use clear metrics and analytical views to support better operational and strategic decisions.</div>
+                        </div>
+                    </div>
+
+                    <div class="erp-welcome__mini-stats">
+                        <div class="erp-welcome__mini-stat">
+                            <span class="erp-welcome__mini-stat-label">Availability</span>
+                            <span class="erp-welcome__mini-stat-value">24/7</span>
+                        </div>
+                        <div class="erp-welcome__mini-stat">
+                            <span class="erp-welcome__mini-stat-label">Platform Type</span>
+                            <span class="erp-welcome__mini-stat-value">Web</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="erp-welcome__audience">
+            <div class="erp-welcome__section-caption">Designed for every role</div>
+            <h2 class="erp-welcome__section-title">A welcome page that introduces the platform as a dark, modern control center for the enterprise</h2>
+
+            <div class="erp-welcome__audience-grid">
+                <div class="erp-welcome__audience-card">
+                    <h3>For Owners</h3>
+                    <p>Get a high-level view of business operations, department performance, and critical efficiency indicators in one place.</p>
+                </div>
+                <div class="erp-welcome__audience-card">
+                    <h3>For Managers</h3>
+                    <p>Monitor deadlines, responsibilities, execution stages, and team workload across structured business processes.</p>
+                </div>
+                <div class="erp-welcome__audience-card">
+                    <h3>For Employees</h3>
+                    <p>Work with assigned tasks, process steps, updates, and operational actions through a clear and focused interface.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.documentElement.setAttribute('data-theme', 'dark');
+</script>
+{% endblock %}

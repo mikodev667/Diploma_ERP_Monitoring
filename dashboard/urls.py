@@ -1,6 +1,7 @@
 from django.urls import path
-from .views import monitoring_view
+from .views import monitoring_view, main_page
 
 urlpatterns = [
-    path("", monitoring_view, name="monitoring_dashboard"),
+    path("", main_page, name="main_page"),
+    path("dashboard", monitoring_view, name="monitoring_dashboard"),
 ]

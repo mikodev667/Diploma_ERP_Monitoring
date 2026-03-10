@@ -19,7 +19,8 @@
             <span class="brand-title">ERP Monitor</span>
         </div>
         <nav class="main-nav">
-            <a href="/" class="nav-link">Dashboard</a>
+            <a href="/" class="nav-link">MainPage</a>
+            <a href="/dashboard" class="nav-link">Dashboard</a>
             {% if request.user.role != "EMPLOYEE" %}
             <a href="/processes/" class="nav-link">Processes</a>
             {% endif %} <a href="/tasks/" class="nav-link">Tasks</a>
