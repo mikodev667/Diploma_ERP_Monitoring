@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,7 +19,7 @@
             <span class="brand-title">ERP Monitor</span>
         </div>
         <nav class="main-nav">
-            <a href="/" class="nav-link">MainPage</a>
+            <a href="/" class="nav-link">Home</a>
             <a href="/dashboard" class="nav-link">Dashboard</a>
             {% if request.user.role != "EMPLOYEE" %}
             <a href="/processes/" class="nav-link">Processes</a>
