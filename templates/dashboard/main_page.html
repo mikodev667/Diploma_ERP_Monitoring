@@ -200,16 +200,38 @@
     }
 
     .monitor-side-image {
-        min-height: 180px;
+        position: relative;
+        min-height: 220px;
         border-radius: 22px;
         border: 1px solid #e8edf6;
-        background:
-            linear-gradient(135deg, rgba(222, 233, 255, 0.95), rgba(247, 239, 244, 0.95)),
-            linear-gradient(180deg, #f9fbff 0%, #f5f7fb 100%);
-        display: flex;
-        align-items: end;
-        justify-content: start;
-        padding: 18px;
+        overflow: hidden;
+        background: #eef3fb;
+    }
+
+    .monitor-side-image__img,
+    .monitor-photo__img,
+    .monitor-image-panel__img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+    }
+
+    .monitor-side-image__overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(16, 24, 40, 0.04) 0%, rgba(16, 24, 40, 0.32) 100%);
+    }
+
+    .monitor-side-image__label {
+        position: absolute;
+        left: 18px;
+        bottom: 18px;
+        z-index: 2;
+        padding: 10px 12px;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.76);
+        backdrop-filter: blur(8px);
         color: #5f6f8b;
         font-weight: 700;
         font-size: 14px;
@@ -230,33 +252,27 @@
         border-radius: 22px;
         border: 1px solid #e9edf5;
         overflow: hidden;
-        background: linear-gradient(135deg, #eef4ff, #f8eef3);
         position: relative;
+        background: #eef4ff;
     }
 
     .monitor-photo::before {
         content: "";
         position: absolute;
         inset: 0;
-        background:
-            linear-gradient(rgba(255,255,255,0.22), rgba(255,255,255,0.04)),
-            repeating-linear-gradient(
-                45deg,
-                rgba(255,255,255,0.16) 0,
-                rgba(255,255,255,0.16) 14px,
-                rgba(255,255,255,0.04) 14px,
-                rgba(255,255,255,0.04) 28px
-            );
+        z-index: 1;
+        background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(17,24,39,0.22));
+        pointer-events: none;
     }
 
     .monitor-photo__label {
         position: absolute;
         left: 14px;
         bottom: 14px;
-        z-index: 1;
+        z-index: 2;
         padding: 8px 10px;
         border-radius: 12px;
-        background: rgba(255, 255, 255, 0.72);
+        background: rgba(255, 255, 255, 0.76);
         backdrop-filter: blur(8px);
         color: #5f6f8b;
         font-size: 12px;
@@ -328,18 +344,17 @@
         border-radius: 24px;
         border: 1px solid #e8edf6;
         overflow: hidden;
-        background:
-            linear-gradient(135deg, rgba(226, 236, 255, 0.95), rgba(243, 248, 255, 0.92) 45%, rgba(247, 235, 240, 0.92)),
-            linear-gradient(180deg, #ffffff 0%, #f8faff 100%);
         position: relative;
+        background: #eef3fb;
     }
 
     .monitor-image-panel::before {
         content: "";
         position: absolute;
-        inset: 18px;
-        border-radius: 20px;
-        border: 1px dashed rgba(116, 130, 154, 0.24);
+        inset: 0;
+        z-index: 1;
+        background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(17,24,39,0.24));
+        pointer-events: none;
     }
 
     .monitor-image-panel__caption {
@@ -347,9 +362,10 @@
         left: 22px;
         right: 22px;
         bottom: 22px;
+        z-index: 2;
         padding: 14px 16px;
         border-radius: 16px;
-        background: rgba(255, 255, 255, 0.74);
+        background: rgba(255, 255, 255, 0.76);
         backdrop-filter: blur(8px);
         color: #5d6c87;
         font-size: 14px;
@@ -458,6 +474,10 @@
         .monitor-image-panel {
             min-height: 260px;
         }
+
+        .monitor-side-image {
+            min-height: 180px;
+        }
     }
 </style>
 {% endblock %}
@@ -515,7 +535,13 @@
                 </div>
 
                 <div class="monitor-side-image reveal reveal--delay-2">
-                    Placeholder image — monitoring workspace
+                    <img
+                        src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=80"
+                        alt="Team working with business monitoring data"
+                        class="monitor-side-image__img"
+                    >
+                    <div class="monitor-side-image__overlay"></div>
+                    <div class="monitor-side-image__label">Operational workspace</div>
                 </div>
             </div>
         </div>
@@ -524,15 +550,38 @@
     <section class="monitor-gallery-strip">
         <div class="monitor-gallery-strip__grid">
             <div class="monitor-photo reveal">
+                <img
+                    src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80"
+                    alt="Process analytics dashboard"
+                    class="monitor-photo__img"
+                >
                 <div class="monitor-photo__label">Process map</div>
             </div>
+
             <div class="monitor-photo reveal reveal--delay-1">
+                <img
+                    src="https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=1200&q=80"
+                    alt="Team coordination meeting"
+                    class="monitor-photo__img"
+                >
                 <div class="monitor-photo__label">Team activity</div>
             </div>
+
             <div class="monitor-photo reveal reveal--delay-2">
+                <img
+                    src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80"
+                    alt="Dashboard metrics on screen"
+                    class="monitor-photo__img"
+                >
                 <div class="monitor-photo__label">Dashboard metrics</div>
             </div>
+
             <div class="monitor-photo reveal reveal--delay-3">
+                <img
+                    src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80"
+                    alt="Warehouse and operational reporting"
+                    class="monitor-photo__img"
+                >
                 <div class="monitor-photo__label">Operational report</div>
             </div>
         </div>
@@ -565,8 +614,13 @@
             </div>
 
             <div class="monitor-image-panel reveal reveal--slow">
+                <img
+                    src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1400&q=80"
+                    alt="Business process planning and workflow review"
+                    class="monitor-image-panel__img"
+                >
                 <div class="monitor-image-panel__caption">
-                    Placeholder image — process flow visualization
+                    Process flow visualization
                 </div>
             </div>
         </div>
@@ -575,8 +629,13 @@
     <section class="monitor-section">
         <div class="monitor-section__grid monitor-section__grid--reverse">
             <div class="monitor-image-panel reveal reveal--slow">
+                <img
+                    src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1400&q=80"
+                    alt="Team collaboration and task coordination"
+                    class="monitor-image-panel__img"
+                >
                 <div class="monitor-image-panel__caption">
-                    Placeholder image — team coordination and task execution
+                    Team coordination and task execution
                 </div>
             </div>
 
