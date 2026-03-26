@@ -4,241 +4,224 @@
 
 {% block extra_css %}
 <style>
-    .erp-dashboard {
+    .monitor-dashboard {
         display: flex;
         flex-direction: column;
-        gap: 28px;
+        gap: 24px;
     }
 
-    .erp-dashboard__hero {
+    .monitor-dashboard__hero,
+    .monitor-dashboard__surface,
+    .monitor-dashboard__mini-card,
+    .monitor-dashboard__stat {
+        background: rgba(255, 255, 255, 0.90);
+        border: 1px solid rgba(148, 163, 184, 0.16);
+        box-shadow: 0 14px 34px rgba(148, 163, 184, 0.12);
+    }
+
+    .monitor-dashboard__hero {
         position: relative;
         overflow: hidden;
-        padding: 34px;
-        border-radius: 30px;
+        padding: 32px;
+        border-radius: 28px;
         background:
-            radial-gradient(circle at 18% 20%, rgba(14, 165, 233, 0.16), transparent 22%),
-            radial-gradient(circle at 82% 18%, rgba(99, 102, 241, 0.18), transparent 26%),
-            linear-gradient(135deg, rgba(7, 17, 31, 0.96), rgba(11, 21, 39, 0.98));
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        box-shadow: 0 28px 60px rgba(2, 6, 23, 0.34);
+            radial-gradient(circle at top left, rgba(214, 229, 255, 0.70), transparent 24%),
+            radial-gradient(circle at top right, rgba(248, 224, 232, 0.62), transparent 24%),
+            radial-gradient(circle at bottom center, rgba(219, 239, 230, 0.52), transparent 30%),
+            linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
     }
 
-    .erp-dashboard__hero::after {
+    .monitor-dashboard__hero::after {
         content: "";
         position: absolute;
         inset: 0;
         background-image:
-            linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-        background-size: 56px 56px;
-        opacity: 0.28;
+            linear-gradient(rgba(255,255,255,0.38) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.38) 1px, transparent 1px);
+        background-size: 36px 36px;
+        opacity: 0.55;
         pointer-events: none;
+        mask-image: linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(255,255,255,0.25));
     }
 
-    .erp-dashboard__hero-inner {
+    .monitor-dashboard__hero-inner {
         position: relative;
         z-index: 1;
         display: grid;
         grid-template-columns: 1.15fr 0.85fr;
-        gap: 28px;
-        align-items: center;
+        gap: 22px;
+        align-items: stretch;
     }
 
-    .erp-dashboard__eyebrow {
+    .monitor-dashboard__eyebrow {
         display: inline-flex;
         align-items: center;
-        padding: 10px 16px;
+        padding: 8px 12px;
         border-radius: 999px;
-        border: 1px solid rgba(125, 211, 252, 0.18);
-        background: rgba(15, 23, 42, 0.55);
-        color: #7dd3fc;
+        background: rgba(255,255,255,0.74);
+        border: 1px solid rgba(148, 163, 184, 0.16);
+        color: #75839d;
         font-size: 12px;
         font-weight: 800;
         text-transform: uppercase;
         letter-spacing: 0.08em;
-        backdrop-filter: blur(10px);
     }
 
-    .erp-dashboard__title {
-        margin: 20px 0 14px;
-        font-size: clamp(2.6rem, 5vw, 4.7rem);
+    .monitor-dashboard__title {
+        margin: 18px 0 14px;
+        font-size: clamp(2.3rem, 4vw, 4rem);
         line-height: 0.98;
         letter-spacing: -0.05em;
         font-weight: 800;
-        color: #f8fafc;
+        color: #1f2937;
     }
 
-    .erp-dashboard__title span {
+    .monitor-dashboard__title span {
         display: block;
-        background: linear-gradient(135deg, #7dd3fc 0%, #60a5fa 35%, #818cf8 72%, #c084fc 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+        color: #73829b;
+        font-weight: 700;
     }
 
-    .erp-dashboard__subtitle {
+    .monitor-dashboard__subtitle {
         max-width: 760px;
         margin: 0;
-        color: #94a3b8;
-        font-size: 1.02rem;
+        color: #67748b;
+        font-size: 1rem;
         line-height: 1.85;
     }
 
-    .erp-dashboard__period {
+    .monitor-dashboard__period {
         margin-top: 18px;
-        color: #cbd5e1;
+        color: #55637d;
         font-size: 14px;
-        font-weight: 600;
+        font-weight: 700;
     }
 
-    .erp-dashboard__hero-panel {
-        position: relative;
-        padding: 1px;
-        border-radius: 26px;
-        background: linear-gradient(145deg, rgba(125, 211, 252, 0.24), rgba(99, 102, 241, 0.12), rgba(255,255,255,0.04));
-        box-shadow: 0 24px 50px rgba(2, 6, 23, 0.30);
+    .monitor-dashboard__hero-panel {
+        display: grid;
+        gap: 14px;
     }
 
-    .erp-dashboard__hero-panel-inner {
-        position: relative;
-        overflow: hidden;
-        padding: 24px;
-        border-radius: 25px;
-        background: linear-gradient(180deg, rgba(10, 16, 30, 0.96), rgba(13, 21, 38, 0.98));
+    .monitor-dashboard__hero-card {
+        padding: 18px;
+        border-radius: 20px;
+        background: rgba(255,255,255,0.78);
+        border: 1px solid rgba(148, 163, 184, 0.16);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.65);
     }
 
-    .erp-dashboard__hero-panel-inner::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.16), transparent 35%);
-        pointer-events: none;
-    }
-
-    .erp-dashboard__hero-card {
-        position: relative;
-        z-index: 1;
-        padding: 16px 18px;
-        border-radius: 18px;
-        background: rgba(15, 23, 42, 0.72);
-        border: 1px solid rgba(148, 163, 184, 0.10);
-    }
-
-    .erp-dashboard__hero-card + .erp-dashboard__hero-card {
-        margin-top: 14px;
-    }
-
-    .erp-dashboard__hero-card-label {
+    .monitor-dashboard__hero-card-label {
         font-size: 12px;
         text-transform: uppercase;
         letter-spacing: 0.08em;
-        color: #7dd3fc;
+        color: #8a98af;
         margin-bottom: 8px;
+        font-weight: 800;
     }
 
-    .erp-dashboard__hero-card-title {
-        color: #eff6ff;
-        font-size: 1.05rem;
+    .monitor-dashboard__hero-card-title {
+        color: #273247;
+        font-size: 1.03rem;
         font-weight: 700;
         margin-bottom: 8px;
     }
 
-    .erp-dashboard__hero-card-text {
-        color: #94a3b8;
-        line-height: 1.7;
+    .monitor-dashboard__hero-card-text {
+        color: #6d7991;
+        line-height: 1.72;
         font-size: 0.95rem;
     }
 
-    .erp-dashboard__stats {
+    .monitor-dashboard__stats {
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 18px;
     }
 
-    .erp-dashboard__stat {
+    .monitor-dashboard__stat {
         position: relative;
         overflow: hidden;
         padding: 22px;
         border-radius: 22px;
-        background: linear-gradient(180deg, rgba(12, 22, 38, 0.82), rgba(10, 19, 34, 0.94));
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        box-shadow: 0 18px 36px rgba(2, 6, 23, 0.22);
+        background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(248,250,255,0.96));
     }
 
-    .erp-dashboard__stat::before {
+    .monitor-dashboard__stat::before {
         content: "";
         position: absolute;
-        top: -40px;
-        right: -40px;
+        top: -42px;
+        right: -42px;
         width: 120px;
         height: 120px;
         border-radius: 50%;
-        background: radial-gradient(circle, rgba(96,165,250,0.18), transparent 70%);
+        background: radial-gradient(circle, rgba(123,149,242,0.16), transparent 70%);
         pointer-events: none;
     }
 
-    .erp-dashboard__stat-label {
-        color: #8ea2bd;
+    .monitor-dashboard__stat-label {
+        color: #7b88a1;
         font-size: 13px;
         margin-bottom: 10px;
+        position: relative;
+        z-index: 1;
     }
 
-    .erp-dashboard__stat-value {
-        color: #f8fafc;
+    .monitor-dashboard__stat-value {
+        color: #1f2937;
         font-size: clamp(1.9rem, 3vw, 2.5rem);
         line-height: 1;
         font-weight: 800;
         letter-spacing: -0.04em;
+        position: relative;
+        z-index: 1;
     }
 
-    .erp-dashboard__stat-value.danger {
-        color: #f87171;
+    .monitor-dashboard__stat-value.danger {
+        color: #d66b7d;
     }
 
-    .erp-dashboard__section {
+    .monitor-dashboard__section {
         display: flex;
         flex-direction: column;
-        gap: 18px;
+        gap: 16px;
     }
 
-    .erp-dashboard__section-head {
+    .monitor-dashboard__section-head {
         display: flex;
         justify-content: space-between;
         align-items: end;
         gap: 18px;
     }
 
-    .erp-dashboard__section-title {
+    .monitor-dashboard__section-title {
         margin: 0;
-        color: #f8fafc;
-        font-size: clamp(1.5rem, 2.4vw, 2.2rem);
-        line-height: 1.15;
+        color: #1f2937;
+        font-size: clamp(1.5rem, 2.4vw, 2.1rem);
+        line-height: 1.1;
         font-weight: 800;
         letter-spacing: -0.03em;
     }
 
-    .erp-dashboard__section-subtitle {
+    .monitor-dashboard__section-subtitle {
         margin: 8px 0 0;
-        color: #8ea2bd;
+        color: #73829b;
         font-size: 14px;
         line-height: 1.75;
     }
 
-    .erp-dashboard__grid-2 {
+    .monitor-dashboard__grid-2 {
         display: grid;
         grid-template-columns: 1.2fr 0.8fr;
         gap: 20px;
     }
 
-    .erp-dashboard__surface {
-        background: linear-gradient(180deg, rgba(12, 22, 38, 0.82), rgba(10, 19, 34, 0.94));
-        border: 1px solid rgba(255, 255, 255, 0.06);
+    .monitor-dashboard__surface {
         border-radius: 24px;
-        box-shadow: 0 18px 36px rgba(2, 6, 23, 0.22);
         overflow: hidden;
+        background: rgba(255,255,255,0.94);
     }
 
-    .erp-dashboard__surface-head {
+    .monitor-dashboard__surface-head {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -246,44 +229,42 @@
         padding: 22px 24px 0;
     }
 
-    .erp-dashboard__surface-title {
-        color: #eff6ff;
-        font-size: 1.08rem;
+    .monitor-dashboard__surface-title {
+        color: #273247;
+        font-size: 1.06rem;
         font-weight: 700;
     }
 
-    .erp-dashboard__surface-subtitle {
-        color: #7c93ac;
+    .monitor-dashboard__surface-subtitle {
+        color: #8693aa;
         font-size: 13px;
     }
 
-    .erp-dashboard__surface-body {
+    .monitor-dashboard__surface-body {
         padding: 22px 24px 24px;
     }
 
-    .erp-dashboard__mini-grid {
+    .monitor-dashboard__mini-grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 18px;
     }
 
-    .erp-dashboard__mini-card {
+    .monitor-dashboard__mini-card {
         padding: 22px;
         border-radius: 22px;
-        background: linear-gradient(180deg, rgba(12, 22, 38, 0.82), rgba(10, 19, 34, 0.94));
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        box-shadow: 0 18px 36px rgba(2, 6, 23, 0.22);
+        background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(248,250,255,0.96));
     }
 
-    .erp-dashboard__mini-card-title {
-        color: #eff6ff;
+    .monitor-dashboard__mini-card-title {
+        color: #2a3448;
         font-size: 1rem;
         font-weight: 700;
         margin-bottom: 10px;
     }
 
-    .erp-dashboard__mini-card-value {
-        color: #f8fafc;
+    .monitor-dashboard__mini-card-value {
+        color: #1f2937;
         font-size: 2rem;
         line-height: 1;
         font-weight: 800;
@@ -291,69 +272,79 @@
         margin-bottom: 10px;
     }
 
-    .erp-dashboard__mini-card-value.danger {
-        color: #f87171;
+    .monitor-dashboard__mini-card-value.danger {
+        color: #d66b7d;
     }
 
-    .erp-dashboard__mini-card-meta {
-        color: #8ea2bd;
+    .monitor-dashboard__mini-card-meta {
+        color: #73829b;
         font-size: 13px;
         line-height: 1.7;
     }
 
-    .erp-dashboard__table-wrap {
+    .monitor-dashboard__table-wrap {
         overflow-x: auto;
+        border-radius: 18px;
     }
 
-    .erp-dashboard__table {
+    .monitor-dashboard__table {
         width: 100%;
-        border-collapse: collapse;
-        color: #dbe7f3;
+        border-collapse: separate;
+        border-spacing: 0;
+        color: #334155;
         font-size: 14px;
+        background: rgba(255,255,255,0.62);
+        border-radius: 18px;
+        overflow: hidden;
     }
 
-    .erp-dashboard__table thead {
-        background: rgba(255, 255, 255, 0.03);
+    .monitor-dashboard__table thead {
+        background: #f4f7fb;
     }
 
-    .erp-dashboard__table th,
-    .erp-dashboard__table td {
+    .monitor-dashboard__table th,
+    .monitor-dashboard__table td {
         padding: 14px 16px;
         text-align: left;
         vertical-align: top;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        border-bottom: 1px solid rgba(148, 163, 184, 0.12);
     }
 
-    .erp-dashboard__table th {
-        color: #8ea2bd;
+    .monitor-dashboard__table th {
+        color: #7d8aa3;
         font-size: 12px;
         text-transform: uppercase;
         letter-spacing: 0.08em;
         font-weight: 700;
     }
 
-    .erp-dashboard__table tbody tr:hover {
-        background: rgba(255, 255, 255, 0.02);
+    .monitor-dashboard__table tbody tr:hover {
+        background: #f8faff;
     }
 
-    .erp-dashboard__link {
-        color: #7dd3fc;
+    .monitor-dashboard__table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .monitor-dashboard__link {
+        color: #6a84df;
         text-decoration: none;
         font-weight: 700;
     }
 
-    .erp-dashboard__link:hover {
-        color: #93c5fd;
+    .monitor-dashboard__link:hover {
+        color: #5771cf;
         text-decoration: underline;
     }
 
-    .erp-dashboard__flags {
+    .monitor-dashboard__flags {
         display: flex;
         flex-wrap: wrap;
         gap: 8px;
     }
 
-    .erp-dashboard__flag {
+    .monitor-dashboard__flag,
+    .monitor-dashboard__status {
         display: inline-flex;
         align-items: center;
         padding: 6px 10px;
@@ -361,89 +352,105 @@
         font-size: 12px;
         font-weight: 700;
         border: 1px solid transparent;
+        line-height: 1;
     }
 
-    .erp-dashboard__flag--default {
-        color: #cbd5e1;
+    .monitor-dashboard__flag--default {
+        color: #73829b;
         background: rgba(148, 163, 184, 0.10);
         border-color: rgba(148, 163, 184, 0.16);
     }
 
-    .erp-dashboard__flag--danger {
-        color: #fca5a5;
-        background: rgba(248, 113, 113, 0.12);
-        border-color: rgba(248, 113, 113, 0.20);
+    .monitor-dashboard__flag--danger {
+        color: #d66b7d;
+        background: rgba(214, 107, 125, 0.12);
+        border-color: rgba(214, 107, 125, 0.18);
     }
 
-    .erp-dashboard__flag--warning {
-        color: #fcd34d;
-        background: rgba(245, 158, 11, 0.12);
-        border-color: rgba(245, 158, 11, 0.20);
+    .monitor-dashboard__flag--warning {
+        color: #c78f28;
+        background: rgba(210, 161, 70, 0.12);
+        border-color: rgba(210, 161, 70, 0.18);
     }
 
-    .erp-dashboard__status {
-        display: inline-flex;
-        align-items: center;
-        padding: 6px 10px;
-        border-radius: 999px;
-        font-size: 12px;
-        font-weight: 700;
-        border: 1px solid transparent;
+    .monitor-dashboard__status--active {
+        color: #6a84df;
+        background: rgba(123, 149, 242, 0.12);
+        border-color: rgba(123, 149, 242, 0.18);
     }
 
-    .erp-dashboard__status--active {
-        color: #7dd3fc;
-        background: rgba(14, 165, 233, 0.12);
-        border-color: rgba(14, 165, 233, 0.20);
+    .monitor-dashboard__status--completed {
+        color: #39996d;
+        background: rgba(57, 153, 109, 0.12);
+        border-color: rgba(57, 153, 109, 0.18);
     }
 
-    .erp-dashboard__status--completed {
-        color: #86efac;
-        background: rgba(34, 197, 94, 0.12);
-        border-color: rgba(34, 197, 94, 0.20);
-    }
-
-    .erp-dashboard__empty {
-        color: #8ea2bd;
+    .monitor-dashboard__empty {
+        color: #8693aa;
         font-size: 14px;
     }
 
-    .erp-dashboard__chart-box {
+    .monitor-dashboard__chart-box {
         height: 340px;
     }
 
+    .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition:
+            opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+            transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+        will-change: opacity, transform;
+    }
+
+    .reveal.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .reveal--delay-1 { transition-delay: 0.12s; }
+    .reveal--delay-2 { transition-delay: 0.24s; }
+    .reveal--delay-3 { transition-delay: 0.36s; }
+
     @media (max-width: 1200px) {
-        .erp-dashboard__stats {
+        .monitor-dashboard__stats {
             grid-template-columns: repeat(2, minmax(0, 1fr));
         }
 
-        .erp-dashboard__hero-inner,
-        .erp-dashboard__grid-2 {
+        .monitor-dashboard__hero-inner,
+        .monitor-dashboard__grid-2 {
             grid-template-columns: 1fr;
         }
     }
 
     @media (max-width: 700px) {
-        .erp-dashboard__hero {
+        .monitor-dashboard__hero {
             padding: 24px 18px;
+            border-radius: 22px;
         }
 
-        .erp-dashboard__surface-head,
-        .erp-dashboard__surface-body {
+        .monitor-dashboard__surface,
+        .monitor-dashboard__mini-card,
+        .monitor-dashboard__stat {
+            border-radius: 20px;
+        }
+
+        .monitor-dashboard__surface-head,
+        .monitor-dashboard__surface-body {
             padding-left: 18px;
             padding-right: 18px;
         }
 
-        .erp-dashboard__stats,
-        .erp-dashboard__mini-grid {
+        .monitor-dashboard__stats,
+        .monitor-dashboard__mini-grid {
             grid-template-columns: 1fr;
         }
 
-        .erp-dashboard__title {
-            font-size: 2.35rem;
+        .monitor-dashboard__title {
+            font-size: 2.2rem;
         }
 
-        .erp-dashboard__chart-box {
+        .monitor-dashboard__chart-box {
             height: 280px;
         }
     }
@@ -451,100 +458,98 @@
 {% endblock %}
 
 {% block content %}
-<section class="erp-dashboard fade-in">
+<section class="monitor-dashboard">
 
-    <section class="erp-dashboard__hero">
-        <div class="erp-dashboard__hero-inner">
+    <section class="monitor-dashboard__hero reveal">
+        <div class="monitor-dashboard__hero-inner">
             <div>
-                <div class="erp-dashboard__eyebrow">Monitoring Dashboard</div>
+                <div class="monitor-dashboard__eyebrow reveal reveal--delay-1">Monitoring Dashboard</div>
 
-                <h1 class="erp-dashboard__title">
+                <h1 class="monitor-dashboard__title reveal reveal--delay-2">
                     Enterprise visibility for
                     <span>process performance</span>
                 </h1>
 
-                <p class="erp-dashboard__subtitle">
+                <p class="monitor-dashboard__subtitle reveal reveal--delay-3">
                     Monitor active workflows, financial outcomes, execution delays, and operational risks
-                    through one unified dark-mode dashboard designed for management-level control.
+                    through one unified dashboard designed for management-level control.
                 </p>
 
-                <div class="erp-dashboard__period">
+                <div class="monitor-dashboard__period reveal reveal--delay-3">
                     Reporting period: {{ kpis.period.start }} — {{ kpis.period.end }}
                 </div>
             </div>
 
-            <div class="erp-dashboard__hero-panel">
-                <div class="erp-dashboard__hero-panel-inner">
-                    <div class="erp-dashboard__hero-card">
-                        <div class="erp-dashboard__hero-card-label">Company</div>
-                        <div class="erp-dashboard__hero-card-title">MakBee operational overview</div>
-                        <div class="erp-dashboard__hero-card-text">
-                            A centralized workspace for process monitoring, financial control,
-                            task execution analysis, and risk visibility across the organization.
-                        </div>
+            <div class="monitor-dashboard__hero-panel reveal reveal--delay-2">
+                <div class="monitor-dashboard__hero-card">
+                    <div class="monitor-dashboard__hero-card-label">Company</div>
+                    <div class="monitor-dashboard__hero-card-title">MakBee operational overview</div>
+                    <div class="monitor-dashboard__hero-card-text">
+                        A centralized workspace for process monitoring, financial control,
+                        task execution analysis, and risk visibility across the organization.
                     </div>
+                </div>
 
-                    <div class="erp-dashboard__hero-card">
-                        <div class="erp-dashboard__hero-card-label">Focus</div>
-                        <div class="erp-dashboard__hero-card-title">Daily decision support</div>
-                        <div class="erp-dashboard__hero-card-text">
-                            Identify overdue tasks, budget overruns, and negative-profit instances early
-                            before they affect operational efficiency.
-                        </div>
+                <div class="monitor-dashboard__hero-card">
+                    <div class="monitor-dashboard__hero-card-label">Focus</div>
+                    <div class="monitor-dashboard__hero-card-title">Daily decision support</div>
+                    <div class="monitor-dashboard__hero-card-text">
+                        Identify overdue tasks, budget overruns, and negative-profit instances early
+                        before they affect operational efficiency.
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="erp-dashboard__stats">
-        <div class="erp-dashboard__stat">
-            <div class="erp-dashboard__stat-label">Active processes</div>
-            <div class="erp-dashboard__stat-value">{{ kpis.active_processes }}</div>
+    <section class="monitor-dashboard__stats">
+        <div class="monitor-dashboard__stat reveal">
+            <div class="monitor-dashboard__stat-label">Active processes</div>
+            <div class="monitor-dashboard__stat-value">{{ kpis.active_processes }}</div>
         </div>
 
-        <div class="erp-dashboard__stat">
-            <div class="erp-dashboard__stat-label">Average profit</div>
-            <div class="erp-dashboard__stat-value {% if kpis.avg_profit < 0 %}danger{% endif %}">
+        <div class="monitor-dashboard__stat reveal reveal--delay-1">
+            <div class="monitor-dashboard__stat-label">Average profit</div>
+            <div class="monitor-dashboard__stat-value {% if kpis.avg_profit < 0 %}danger{% endif %}">
                 {{ kpis.avg_profit|intcomma }}
             </div>
         </div>
 
-        <div class="erp-dashboard__stat">
-            <div class="erp-dashboard__stat-label">Overdue tasks</div>
-            <div class="erp-dashboard__stat-value {% if kpis.overdue_tasks > 0 %}danger{% endif %}">
+        <div class="monitor-dashboard__stat reveal reveal--delay-2">
+            <div class="monitor-dashboard__stat-label">Overdue tasks</div>
+            <div class="monitor-dashboard__stat-value {% if kpis.overdue_tasks > 0 %}danger{% endif %}">
                 {{ kpis.overdue_tasks }}
             </div>
         </div>
 
-        <div class="erp-dashboard__stat">
-            <div class="erp-dashboard__stat-label">Budget overruns</div>
-            <div class="erp-dashboard__stat-value {% if kpis.budget_overruns > 0 %}danger{% endif %}">
+        <div class="monitor-dashboard__stat reveal reveal--delay-3">
+            <div class="monitor-dashboard__stat-label">Budget overruns</div>
+            <div class="monitor-dashboard__stat-value {% if kpis.budget_overruns > 0 %}danger{% endif %}">
                 {{ kpis.budget_overruns }}
             </div>
         </div>
     </section>
 
-    <section class="erp-dashboard__section">
-        <div class="erp-dashboard__section-head">
+    <section class="monitor-dashboard__section">
+        <div class="monitor-dashboard__section-head reveal">
             <div>
-                <h2 class="erp-dashboard__section-title">Risk-focused process overview</h2>
-                <p class="erp-dashboard__section-subtitle">
+                <h2 class="monitor-dashboard__section-title">Risk-focused process overview</h2>
+                <p class="monitor-dashboard__section-subtitle">
                     Processes that currently require attention because of negative profit, missed deadlines, or budget overruns.
                 </p>
             </div>
         </div>
 
-        <div class="erp-dashboard__surface">
-            <div class="erp-dashboard__surface-head">
+        <div class="monitor-dashboard__surface reveal reveal--delay-1">
+            <div class="monitor-dashboard__surface-head">
                 <div>
-                    <div class="erp-dashboard__surface-title">Problem processes</div>
-                    <div class="erp-dashboard__surface-subtitle">Operational risk list for the selected period</div>
+                    <div class="monitor-dashboard__surface-title">Problem processes</div>
+                    <div class="monitor-dashboard__surface-subtitle">Operational risk list for the selected period</div>
                 </div>
             </div>
 
-            <div class="erp-dashboard__surface-body erp-dashboard__table-wrap">
-                <table class="erp-dashboard__table">
+            <div class="monitor-dashboard__surface-body monitor-dashboard__table-wrap">
+                <table class="monitor-dashboard__table">
                     <thead>
                         <tr>
                             <th>Instance</th>
@@ -562,7 +567,7 @@
                         {% with pi=row.process_instance %}
                         <tr>
                             <td>
-                                <a class="erp-dashboard__link" href="{% url 'process_instance_detail' pi.id %}">
+                                <a class="monitor-dashboard__link" href="{% url 'process_instance_detail' pi.id %}">
                                     {{ pi.name }}
                                 </a>
                             </td>
@@ -577,22 +582,22 @@
                             <td>{{ pi.planned_end_date|default:"—" }}</td>
                             <td>
                                 {% if pi.is_completed %}
-                                    <span class="erp-dashboard__status erp-dashboard__status--completed">Completed</span>
+                                    <span class="monitor-dashboard__status monitor-dashboard__status--completed">Completed</span>
                                 {% else %}
-                                    <span class="erp-dashboard__status erp-dashboard__status--active">Active</span>
+                                    <span class="monitor-dashboard__status monitor-dashboard__status--active">Active</span>
                                 {% endif %}
                             </td>
                             <td>
-                                <div class="erp-dashboard__flags">
+                                <div class="monitor-dashboard__flags">
                                     {% for f in row.flags %}
                                         {% if f == "NEGATIVE_PROFIT" %}
-                                            <span class="erp-dashboard__flag erp-dashboard__flag--danger">Negative profit</span>
+                                            <span class="monitor-dashboard__flag monitor-dashboard__flag--danger">Negative profit</span>
                                         {% elif f == "BUDGET_OVERRUN" %}
-                                            <span class="erp-dashboard__flag erp-dashboard__flag--warning">Budget overrun</span>
+                                            <span class="monitor-dashboard__flag monitor-dashboard__flag--warning">Budget overrun</span>
                                         {% elif f == "OVERDUE" %}
-                                            <span class="erp-dashboard__flag erp-dashboard__flag--danger">Overdue</span>
+                                            <span class="monitor-dashboard__flag monitor-dashboard__flag--danger">Overdue</span>
                                         {% else %}
-                                            <span class="erp-dashboard__flag erp-dashboard__flag--default">{{ f }}</span>
+                                            <span class="monitor-dashboard__flag monitor-dashboard__flag--default">{{ f }}</span>
                                         {% endif %}
                                     {% endfor %}
                                 </div>
@@ -601,7 +606,7 @@
                         {% endwith %}
                     {% empty %}
                         <tr>
-                            <td colspan="8" class="erp-dashboard__empty">No problem processes for this period.</td>
+                            <td colspan="8" class="monitor-dashboard__empty">No problem processes for this period.</td>
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -610,53 +615,53 @@
         </div>
     </section>
 
-    <section class="erp-dashboard__section">
-        <div class="erp-dashboard__section-head">
+    <section class="monitor-dashboard__section">
+        <div class="monitor-dashboard__section-head reveal">
             <div>
-                <h2 class="erp-dashboard__section-title">Time and profit analytics</h2>
-                <p class="erp-dashboard__section-subtitle">
+                <h2 class="monitor-dashboard__section-title">Time and profit analytics</h2>
+                <p class="monitor-dashboard__section-subtitle">
                     Compare current and previous period results and track daily profit movement over time.
                 </p>
             </div>
         </div>
 
-        <div class="erp-dashboard__grid-2">
-            <div class="erp-dashboard__surface">
-                <div class="erp-dashboard__surface-head">
+        <div class="monitor-dashboard__grid-2">
+            <div class="monitor-dashboard__surface reveal reveal--delay-1">
+                <div class="monitor-dashboard__surface-head">
                     <div>
-                        <div class="erp-dashboard__surface-title">Daily profit trend</div>
-                        <div class="erp-dashboard__surface-subtitle">Dynamic view of financial performance</div>
+                        <div class="monitor-dashboard__surface-title">Daily profit trend</div>
+                        <div class="monitor-dashboard__surface-subtitle">Dynamic view of financial performance</div>
                     </div>
                 </div>
-                <div class="erp-dashboard__surface-body">
-                    <div class="erp-dashboard__chart-box">
+                <div class="monitor-dashboard__surface-body">
+                    <div class="monitor-dashboard__chart-box">
                         <canvas id="dailyProfitChart"></canvas>
                     </div>
 
                     {% if not analytics.daily_profit %}
-                        <div class="erp-dashboard__empty">No data available.</div>
+                        <div class="monitor-dashboard__empty">No data available.</div>
                     {% endif %}
                 </div>
             </div>
 
-            <div class="erp-dashboard__mini-grid">
-                <div class="erp-dashboard__mini-card">
-                    <div class="erp-dashboard__mini-card-title">Current period profit</div>
-                    <div class="erp-dashboard__mini-card-value {% if analytics.current.profit < 0 %}danger{% endif %}">
+            <div class="monitor-dashboard__mini-grid">
+                <div class="monitor-dashboard__mini-card reveal reveal--delay-2">
+                    <div class="monitor-dashboard__mini-card-title">Current period profit</div>
+                    <div class="monitor-dashboard__mini-card-value {% if analytics.current.profit < 0 %}danger{% endif %}">
                         {{ analytics.current.profit|intcomma }}
                     </div>
-                    <div class="erp-dashboard__mini-card-meta">
+                    <div class="monitor-dashboard__mini-card-meta">
                         Income: {{ analytics.current.income|intcomma }}<br>
                         Expense: {{ analytics.current.expense|intcomma }}
                     </div>
                 </div>
 
-                <div class="erp-dashboard__mini-card">
-                    <div class="erp-dashboard__mini-card-title">Previous period profit</div>
-                    <div class="erp-dashboard__mini-card-value {% if analytics.previous.profit < 0 %}danger{% endif %}">
+                <div class="monitor-dashboard__mini-card reveal reveal--delay-3">
+                    <div class="monitor-dashboard__mini-card-title">Previous period profit</div>
+                    <div class="monitor-dashboard__mini-card-value {% if analytics.previous.profit < 0 %}danger{% endif %}">
                         {{ analytics.previous.profit|intcomma }}
                     </div>
-                    <div class="erp-dashboard__mini-card-meta">
+                    <div class="monitor-dashboard__mini-card-meta">
                         Income: {{ analytics.previous.income|intcomma }}<br>
                         Expense: {{ analytics.previous.expense|intcomma }}
                     </div>
@@ -686,79 +691,99 @@
     {% endfor %}
   ];
 
-  if (labels.length === 0) return;
+  if (labels.length > 0) {
+    const ctx = el.getContext("2d");
+    const gradient = ctx.createLinearGradient(0, 0, 0, 320);
+    gradient.addColorStop(0, "rgba(123, 149, 242, 0.28)");
+    gradient.addColorStop(1, "rgba(123, 149, 242, 0.00)");
 
-  const ctx = el.getContext("2d");
-  const gradient = ctx.createLinearGradient(0, 0, 0, 320);
-  gradient.addColorStop(0, "rgba(96, 165, 250, 0.35)");
-  gradient.addColorStop(1, "rgba(96, 165, 250, 0.00)");
-
-  new Chart(el, {
-    type: "line",
-    data: {
-      labels: labels,
-      datasets: [{
-        label: "Profit",
-        data: values,
-        borderColor: "#60a5fa",
-        backgroundColor: gradient,
-        fill: true,
-        tension: 0.3,
-        borderWidth: 2,
-        pointRadius: 3,
-        pointHoverRadius: 5,
-        pointBackgroundColor: "#93c5fd",
-        pointBorderWidth: 0
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: {
-        mode: "index",
-        intersect: false
+    new Chart(el, {
+      type: "line",
+      data: {
+        labels: labels,
+        datasets: [{
+          label: "Profit",
+          data: values,
+          borderColor: "#7b95f2",
+          backgroundColor: gradient,
+          fill: true,
+          tension: 0.32,
+          borderWidth: 2,
+          pointRadius: 3,
+          pointHoverRadius: 5,
+          pointBackgroundColor: "#9db2ff",
+          pointBorderWidth: 0
+        }]
       },
-      plugins: {
-        legend: {
-          display: false
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+          mode: "index",
+          intersect: false
         },
-        tooltip: {
-          backgroundColor: "rgba(9, 15, 27, 0.96)",
-          borderColor: "rgba(125, 211, 252, 0.18)",
-          borderWidth: 1,
-          titleColor: "#eff6ff",
-          bodyColor: "#cbd5e1",
-          callbacks: {
-            label: function(ctx) {
-              const v = ctx.parsed.y ?? 0;
-              return "Profit: " + v.toLocaleString("en-US", { maximumFractionDigits: 2 });
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            backgroundColor: "rgba(255, 255, 255, 0.96)",
+            titleColor: "#1f2937",
+            bodyColor: "#475569",
+            borderColor: "rgba(148, 163, 184, 0.18)",
+            borderWidth: 1,
+            callbacks: {
+              label: function(ctx) {
+                const v = ctx.parsed.y ?? 0;
+                return "Profit: " + v.toLocaleString("en-US", { maximumFractionDigits: 2 });
+              }
             }
           }
-        }
-      },
-      scales: {
-        x: {
-          ticks: {
-            color: "#8ea2bd"
-          },
-          grid: {
-            color: "rgba(255,255,255,0.05)"
-          }
         },
-        y: {
-          ticks: {
-            color: "#8ea2bd",
-            callback: function(value) {
-              return Number(value).toLocaleString("en-US", { maximumFractionDigits: 0 });
+        scales: {
+          x: {
+            ticks: {
+              color: "#7b88a1"
+            },
+            grid: {
+              color: "rgba(148, 163, 184, 0.10)"
             }
           },
-          grid: {
-            color: "rgba(255,255,255,0.05)"
+          y: {
+            ticks: {
+              color: "#7b88a1",
+              callback: function(value) {
+                return Number(value).toLocaleString("en-US", { maximumFractionDigits: 0 });
+              }
+            },
+            grid: {
+              color: "rgba(148, 163, 184, 0.10)"
+            }
           }
         }
       }
+    });
+  }
+
+  const revealItems = document.querySelectorAll(".reveal");
+  if (!revealItems.length) return;
+
+  const observer = new IntersectionObserver(
+    (entries, obs) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          obs.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      threshold: 0.14,
+      rootMargin: "0px 0px -40px 0px"
     }
-  });
+  );
+
+  revealItems.forEach((item) => observer.observe(item));
 })();
 </script>
 {% endblock %}
