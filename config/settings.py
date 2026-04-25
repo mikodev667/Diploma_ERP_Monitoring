@@ -80,7 +80,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 # redirect
-LOGIN_REDIRECT_URL = 'dashboard'
+LOGIN_REDIRECT_URL = 'main_page'
 LOGOUT_REDIRECT_URL = 'login'
 LOGIN_URL = 'login'
 
