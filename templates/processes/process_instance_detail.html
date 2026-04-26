@@ -39,6 +39,24 @@
         </div>
 
         <div class="card">
+            <div class="card-title">Branch</div>
+            <div class="card-metric">
+                {{ process_instance.branch|default:"—" }}
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Business date</div>
+            <div class="card-metric">
+                {% if process_instance.business_date %}
+                    {{ process_instance.business_date|date:"Y-m-d" }}
+                {% else %}
+                    <span class="muted">—</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card">
             <div class="card-title">Deadline</div>
             {# ВАЖНО: is_overdue у вас метод. В шаблоне безопаснее использовать булево из view: is_overdue_value #}
             <div class="card-metric {% if is_overdue_value %}danger{% endif %}">

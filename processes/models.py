@@ -4,7 +4,7 @@ from django.db import models
 from django.db.models import Sum, Max
 from django.utils import timezone
 
-from orgs.models import Organization
+from orgs.models import Organization, Branch
 
 
 class Process(models.Model):
@@ -97,6 +97,20 @@ class ProcessInstance(models.Model):
         null=True,
         blank=True,
         related_name="current_instances",
+    )
+
+    branch = models.ForeignKey(
+        Branch,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="process_instances",
+    )
+
+    business_date = models.DateField(
+        null=True,
+        blank=True,
+        verbose_name="Business date",
     )
 
     def inventory_cost(self):

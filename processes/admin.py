@@ -22,14 +22,29 @@ admin.site.register(Stage)
 class ProcessInstanceAdmin(admin.ModelAdmin):
     list_display = (
         "name",
+        "branch",
+        "business_date",
         "process",
         "manager",
+        "planned_end_date",
         "started_at",
         "current_profit",
         "is_completed",
     )
 
-    list_filter = ("process", "manager", "is_completed")
+    list_filter = (
+        "process",
+        "branch",
+        "business_date",
+        "manager",
+        "is_completed",
+    )
+
+    search_fields = (
+        "name",
+        "branch",
+        "process__name",
+    )
 
     def current_profit(self, obj):
         return obj.profit()

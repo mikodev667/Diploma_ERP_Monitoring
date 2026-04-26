@@ -17,6 +17,8 @@
             <thead>
                 <tr>
                     <th>Name</th>
+                    <th>Branch</th>
+                    <th>Date</th>
                     <th>Process</th>
                     <th>Manager</th>
                     <th>Deadline</th>
@@ -33,7 +35,8 @@
                             {{ pi.name }}
                         </a>
                     </td>
-
+                    <td>{{ pi.branch|default:"—" }}</td>
+                    <td>{{ pi.business_date|date:"Y-m-d"|default:"—" }}</td>
                     <td>{{ pi.process.name }}</td>
                     <td class="muted">{{ pi.manager }}</td>
 
@@ -63,7 +66,7 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="6" class="muted">No process instances</td>
+                    <td colspan="8" class="muted">No process instances</td>
                 </tr>
                 {% endfor %}
             </tbody>

@@ -8,7 +8,7 @@ from .models import StageHistory
 
 
 @transaction.atomic
-def start_process(process, name):
+def start_process(process, name, branch="", business_date=None, manager=None, planned_budget=None, planned_end_date=None):
     """
     Создаёт запуск процесса и автоматически генерирует задачи по этапам.
     Инициализирует первый этап и журнал этапов.
@@ -16,6 +16,11 @@ def start_process(process, name):
     instance = ProcessInstance.objects.create(
         process=process,
         name=name,
+        branch=branch,
+        business_date=business_date,
+        manager=manager,
+        planned_budget=planned_budget,
+        planned_end_date=planned_end_date,
     )
 
     # 1) Создаём задачи по этапам

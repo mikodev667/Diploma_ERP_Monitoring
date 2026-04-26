@@ -553,6 +553,8 @@
                     <thead>
                         <tr>
                             <th>Instance</th>
+                            <th>Branch</th>
+                            <th>Date</th>
                             <th>Process</th>
                             <th>Profit</th>
                             <th>Cost</th>
@@ -571,6 +573,14 @@
                                     {{ pi.name }}
                                 </a>
                             </td>
+                            <td>
+                                {% if pi.branch %}
+                                    {{ pi.branch.name }}
+                                {% else %}
+                                    —
+                                {% endif %}
+                            </td>
+                            <td>{{ pi.business_date|date:"Y-m-d"|default:"—" }}</td>
                             <td>{{ pi.process.name }}</td>
                             <td>
                                 <span class="{% if row.profit < 0 %}danger{% endif %}">
@@ -606,7 +616,7 @@
                         {% endwith %}
                     {% empty %}
                         <tr>
-                            <td colspan="8" class="monitor-dashboard__empty">No problem processes for this period.</td>
+                            <td colspan="10" class="monitor-dashboard__empty">No problem processes for this period.</td>
                         </tr>
                     {% endfor %}
                     </tbody>

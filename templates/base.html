@@ -76,12 +76,14 @@
     <!-- Optional sidebar (future ready) -->
     {% block sidebar %}{% endblock %}
     <!-- ===== MAIN CONTENT ===== -->
+    {% block main %}
     <main class="app-content">
         <div class="container content-container">
             {% block content %}
             <!-- Page content -->
             {% endblock %} </div>
     </main>
+    {% endblock %}
 </div>
 <!-- ===== FOOTER ===== -->
 <footer class="app-footer">
